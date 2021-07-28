@@ -1,0 +1,26 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+# deploy list all the different config files we want
+# to load into our cluster
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    # when we build our image don't push it to docker hub
+    push: false
+  artifacts:
+    - image: isaacelesia/auth
+      # the folder that contains codes for the above image
+      context: auth
+      # docker file to use
+      docker:
+        dockerfile: Dockerfile
+        # sync tells skaffold how to manage any file that change
+        # inside the above provided folder
+      sync:
+        manual:
+          # skaffold should watch all the files that ends with .ts
+          - src: 'src/**/*.ts'
+            dest: .
