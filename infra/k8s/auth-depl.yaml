@@ -4,7 +4,7 @@ metadata:
   name: auth-depl
 spec:
   replicas: 1
-  # selector to find the pods the development will create
+  # selector to find the pods the deployment will create
   selector:
     matchLabels:
       app: auth

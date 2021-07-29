@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas: 1
+  # selector to find the pods the deployment will create
+  selector:
+    matchLabels:
+      app: client
+    # template for creating pods
+  template:
+    metadata:
+      labels:
+        app: client
+        # spec for telling the pod how to behave
+    spec:
+      containers:
+        - name: client
+          image: isaacelesia/client
+          # env:
+          #   # the name of ENV inside the container
+          #   - name: JWT_KEY
+          #     # Where to get the value for the ENV
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: jwt-secret
+          #         key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+# Tell the service how to behave
+spec:
+  type: ClusterIP
+  # selector to tell the service the set of pods it should gorvern access to
+  selector:
+    app: client
+  #pods we want to expose on that pod
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
