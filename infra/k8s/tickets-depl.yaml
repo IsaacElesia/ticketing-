@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: tickets-depl
 spec:
   replicas: 1
   # selector to find the pods the deployment will create
   selector:
     matchLabels:
-      app: auth
+      app: tickets
     # template for creating pods
   template:
     metadata:
       labels:
-        app: auth
+        app: tickets
         # spec for telling the pod how to behave
     spec:
       containers:
-        - name: auth
-          image: isaacelesia/auth
+        - name: tickets
+          image: isaacelesia/tickets
           env:
             # the name of ENV inside the container
             - name: MONGO_URI
-              value: 'mongodb://auth-mongo-srv:27017/auth'
+              value: 'mongodb://tickets-mongo-srv:27017/tickets'
             - name: JWT_KEY
               # Where to get the value for the ENV
               valueFrom:
@@ -32,16 +32,16 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: tickets-srv
 # Tell the service how to behave
 spec:
   type: ClusterIP
   # selector to tell the service the set of pods it should gorvern access to
   selector:
-    app: auth
+    app: tickets
   #pods we want to expose on that pod
   ports:
-    - name: auth
+    - name: tickets
       protocol: TCP
       port: 3000
       targetPort: 3000

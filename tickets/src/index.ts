@@ -12,7 +12,7 @@ const start = async () => {
 	}
 
 	try {
-		await mongoose.connect(process.env.MONGO_URI, {
+		await mongoose.connect(process.env.MONGO_URI!, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 			useCreateIndex: true,
@@ -24,7 +24,7 @@ const start = async () => {
 	}
 
 	app.listen(3000, () => {
-		console.log('Auth server listening on port 3000!!!');
+		console.log('Tickest server listening on port 3000!!!');
 	});
 };
 

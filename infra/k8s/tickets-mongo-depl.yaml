@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-mongo-depl
+spec:
+  replicas: 1
+  # selector to find the pods the development will create
+  selector:
+    matchLabels:
+      app: tickets-mongo
+    # template for creating pods
+  template:
+    metadata:
+      labels:
+        app: tickets-mongo
+        # spec for telling the pod how to behave
+    spec:
+      containers:
+        - name: tickets-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-mongo-srv
+# Tell the service how to behave
+spec:
+  type: ClusterIP
+  # selector to tell the service the set of pods it should gorvern access to
+  selector:
+    app: tickets-mongo
+  #pods we want to expose on that pod
+  ports:
+    - name: tickets-db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
