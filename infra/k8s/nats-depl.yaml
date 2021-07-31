@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats-depl
+spec:
+  replicas: 1
+  # selector to find the pods the deployment will create
+  selector:
+    matchLabels:
+      app: nats
+    # template for creating pods
+  template:
+    metadata:
+      labels:
+        app: nats
+        # spec for telling the pod how to behave
+    spec:
+      containers:
+        - name: nats
+          image: nats-streaming:0.17.0
+          #Commands to run after NATS Streaming installation
+          args:
+            [
+              '-p',
+              '4222',
+              '-m',
+              '8222',
+              '-hbi',
+              '5s',
+              '-hbt',
+              '5s',
+              '-hbf',
+              '2',
+              '-SD',
+              '-cid',
+              'ticketing',
+            ]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats-srv
+# Tell the service how to behave
+spec:
+  type: ClusterIP
+  # selector to tell the service the set of pods it should gorvern access to
+  selector:
+    app: nats
+  #pods we want to expose on that pod
+  ports:
+    - name: client
+      protocol: TCP
+      port: 4222
+      targetPort: 4222
+    - name: monitoring
+      protocol: TCP
+      port: 8222
+      targetPort: 8222
